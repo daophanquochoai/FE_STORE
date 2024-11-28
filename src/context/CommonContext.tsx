@@ -3,8 +3,27 @@ import {getInfo, parseJwt, refreshToken} from "../Helper/Helper.ts";
 import {toast} from "react-toastify";
 
 type contextValue =  {
-    isLogin :  boolean,
-    setIsLogin : (state : boolean) => void,
+    numberItem: object[];
+    sort: number;
+    setSearch: (value: (((prevState: string) => string) | string)) => void;
+    setPrice: (value: (((prevState: number[]) => number[]) | number[])) => void;
+    setRate: (value: (((prevState: number) => number) | number)) => void;
+    setIsLogin: (value: (((prevState: boolean) => boolean) | boolean)) => void;
+    setSort: (value: (((prevState: number) => number) | number)) => void;
+    isLogin: boolean;
+    search: string;
+    rate: number;
+    setCategory: (value: (((prevState: number) => number) | number)) => void;
+    price: number[];
+    page: number;
+    category: number;
+    handleUpDownItem: (item: number, number: number) => void;
+    setNumberItem: (value: (((prevState: object[]) => object[]) | object[])) => void;
+    setPage: (value: (((prevState: number) => number) | number)) => void,
+    info : object;
+    setInfo: (value: (((prevState: object) => object) | object)) => void;
+    acceptCart : object[];
+    setAcceptCart : Function;
 }
 type Info = {
     id: number

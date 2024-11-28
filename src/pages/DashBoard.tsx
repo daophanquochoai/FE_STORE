@@ -1,13 +1,14 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
     UploadOutlined,
-    VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Button, Layout, Menu, theme } from 'antd';
-import {FaFireAlt} from "react-icons/fa";
-import {Outlet} from "react-router-dom";
+import {FaBlog, FaBoxes, FaFireAlt} from "react-icons/fa";
+import {NavLink, Outlet} from "react-router-dom";
+import {AiOutlineProduct} from "react-icons/ai";
+import {MdCategory} from "react-icons/md";
 
 const { Header, Sider, Content } = Layout;
 
@@ -33,17 +34,27 @@ const DashBoard = () => {
                         {
                             key: '1',
                             icon: <FaFireAlt />,
-                            label: 'Overview',
+                            label: <NavLink to={'/admin'}>Overview</NavLink>,
                         },
                         {
                             key: '2',
-                            icon: <VideoCameraOutlined />,
-                            label: 'nav 2',
+                            icon: <AiOutlineProduct />,
+                            label: <NavLink to={'/admin/product'}>Product</NavLink>,
                         },
                         {
                             key: '3',
-                            icon: <UploadOutlined />,
-                            label: 'nav 3',
+                            icon: <MdCategory />,
+                            label: <NavLink to={'/admin/category'}>Category</NavLink>,
+                        },
+                        {
+                            key: '4',
+                            icon: <FaBoxes />,
+                            label: <NavLink to={'/admin/order'}>Order</NavLink>,
+                        },
+                        {
+                            key: '5',
+                            icon: <FaBlog />,
+                            label: <NavLink to={'/admin/blog'}>Blog</NavLink>,
                         },
                     ]}
                 />

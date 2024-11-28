@@ -192,7 +192,7 @@ const TableAddress  = ( props: Props) => {
         <div>
             <Spin tip={"Change..."} spinning={loadingTable}>
                 <Table<DataType> columns={columns} pagination={false} dataSource={dataSource}  scroll={{ y: 200 }} />
-                <button onClick={() => showModal(true)} disabled={edit} className={`${edit ? 'bg-green-500' : 'bg-gray-500'} text-white font-bold px-2 py-1 w-full`}>NEW ADDRESS</button>
+                <button onClick={() => showModal(true)} disabled={!edit} className={`${edit ? 'bg-green-500' : 'bg-gray-500'} text-white font-bold px-2 py-1 w-full`}>NEW ADDRESS</button>
             </Spin>
             <Modal title={<p className={'text-green-500'}>ADD NEW ADDRESS</p>}
                    okText={"ADD"}

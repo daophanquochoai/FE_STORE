@@ -134,3 +134,22 @@ html{
 :where(.css-dev-only-do-not-override-5wsri9).ant-checkbox-wrapper:not(.ant-checkbox-wrapper-disabled):hover .ant-checkbox-checked:not(.ant-checkbox-disabled) .ant-checkbox-inner {
     background-color: rgba(107, 178, 82, 0.58);
 }
+
+/*select*/
+:where(.css-dev-only-do-not-override-ni1kz0).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover .ant-select-selector {
+    border-color: rgba(107, 178, 82, 0.88);
+}
+.ant-select-focused:where(.css-dev-only-do-not-override-ni1kz0).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer) .ant-select-selector{
+    border-color: rgba(107, 178, 82, 0.88);
+    box-shadow: 0 0 0 2px rgba(107, 178, 82, 0.28);
+}
+:where(.css-dev-only-do-not-override-ni1kz0).ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector{
+    border-color: rgba(107, 178, 82, 0.88);
+}
+/* chexk box */
+:where(.css-dev-only-do-not-override-ni1kz0).ant-switch.ant-switch-checked:hover:not(.ant-switch-disabled) {
+    background-color: rgb(107, 178, 82) !important;
+}
+:where(.css-dev-only-do-not-override-ni1kz0).ant-switch.ant-switch-checked{
+    background-color: rgb(107, 178, 82) !important;
+}

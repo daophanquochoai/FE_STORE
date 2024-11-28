@@ -30,7 +30,7 @@ const HeaderBlog  = (props : Props) => {
             if( response.status === 200 ){
                 const temp : MenuProps[] = [{
                     key : 0,
-                    label : <p className={'w-full'} onClick={ e => setSortBy('')}>All</p>
+                    label : <p className={'w-full'} onClick={ e => props.setSortBy('')}>All</p>
                 }]
                 response.data.forEach( tag => temp.push({
                     key : tag.id,

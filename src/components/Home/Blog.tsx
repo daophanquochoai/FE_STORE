@@ -1,28 +1,30 @@
 import React, {useEffect, useState} from 'react';
-import {FaCalendarDay} from "react-icons/fa";
 import BlogItem from "./BlogItem.tsx";
 import {getNotifyRecent} from "../../Helper/Helper.ts";
 import Skeleton from "react-loading-skeleton";
 import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 const Blog = () => {
 
     const [blogData, setBlogData] = useState<object[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true)
-            const data = await getNotifyRecent();
+            const response = await getNotifyRecent();
             setIsLoading(false)
-            if( data.hasOwnProperty('code') && data.code === "ERR_NETWORK"){
+            if( response.hasOwnProperty('code') && response.code === "ERR_NETWORK"){
                 toast.error("Blog don't loading!");
                 return;
             }
-            if( data.status === 200 ){
-                setBlogData(data);
+            if( response.status === 200 ){
+                setBlogData(response.data);
             }else{
-                toast.error(data.message);
+                toast.error(response.message);
             }
         }
         fetchData()
@@ -32,9 +34,9 @@ const Blog = () => {
         <div className={'mx-[10%] mt-16'}>
           <div className={'flex justify-between items-center'}>
               <p className={'text-3xl font-bold'}>Our Recent Blog</p>
-              <button className={'bg-green_primary p-2 rounded-[7px] text-white hover:bg-yellow-200 transition-all duration-300'}>View All</button>
+              <button className={'bg-green_primary p-2 rounded-[7px] text-white hover:bg-yellow-200 transition-all duration-300'} onClick={() => { scrollTo(0,0); navigate('blog')}}>View All</button>
           </div>
-          <div className={`mt-8 grid ${blogData.length > 0 ? 'grid-cols-3' : 'grid-cols-1'} gap-4`}>
+          <div className={`mt-8 grid ${blogData.length > 0 ? 'grid-cols-5' : 'grid-cols-1'} gap-4`}>
               {
                  isLoading ?
                      <>

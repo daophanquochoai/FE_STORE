@@ -17,6 +17,10 @@ import AcceptPage from "./pages/AcceptPage.tsx";
 import WishListPage from "./pages/WishListPage.tsx";
 import DashBoard from "./pages/DashBoard.tsx";
 import OverView from "./pages/OverView.tsx";
+import ProductManage from "./pages/ProductManage.tsx";
+import CategoryPage from "./pages/CategoryPage.tsx";
+import OrderManage from "./pages/OrderManage.tsx";
+import BlogManage from "./pages/BlogManage.tsx";
 
 const routes = [
     {
@@ -74,6 +78,22 @@ const routes = [
             {
                 index: true,
                 element: <OverView />
+            },
+            {
+                path: 'product',
+                element : <ProductManage />
+            },
+            {
+                path: 'category',
+                element : <CategoryPage />
+            },
+            {
+                path: 'order',
+                element : <OrderManage />
+            },
+            {
+                path: 'blog',
+                element : <BlogManage />
             }
         ]
     }

@@ -3,22 +3,10 @@ import SideLeft from "./SideLeft.tsx";
 import Item from "../Home/Item.tsx";
 import {Dropdown, MenuProps, Pagination, Space, Spin} from "antd";
 import {DownOutlined} from "@ant-design/icons";
-import {getProductByPage, getProductWithOption} from "../../Helper/Helper.ts";
+import { getProductWithOption} from "../../Helper/Helper.ts";
 import {CommonContext} from "../../context/CommonContext.tsx";
 import {toast} from "react-toastify";
 
-// type itemType = {
-//     title : string,
-//     price : number,
-//     priceOld : number
-//     image : string,
-//     rate : number,
-//     selled : string,
-//     quantity : number,
-//     numberItem : number
-//     handleUpItem: () => void,
-//     handleDownItem : () => void
-// }
 
 const Products:React.FC = () => {
     const items: MenuProps['items'] = [
@@ -56,7 +44,6 @@ const Products:React.FC = () => {
                 toast.error("Product don't loading!");
                 return;
             }
-            console.log(data)
             if( data.status === 200 ){
                 setPageTotal(data.data.totalPage);
                 const dateItem: object[] = [];
@@ -99,7 +86,7 @@ const Products:React.FC = () => {
                     </div>
                 </div>
                 <Spin tip={"Loading..."} spinning={isLoadingProduct}>
-                    <div className={`grid ${dataProduct.length > 0 ? "grid-cols-6" : "grid-cols-1"} gap-4`}>
+                    <div className={`grid ${dataProduct.length > 0 ? "grid-cols-5" : "grid-cols-1"} gap-4`}>
                         {
                             dataProduct.length > 0 ?
                                 <>

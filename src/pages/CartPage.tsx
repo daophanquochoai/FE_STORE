@@ -35,6 +35,7 @@ const CartPage = () => {
             setLoading(true)
             const response = await getCart(localStorage.getItem("accessToken"));
             setLoading(false)
+            console.log(response)
             if( response.hasOwnProperty('code') && response.code === "ERR_NETWORK"){
                 toast.error("NETWORK CONNECTED FAIL!!!");
                 return;

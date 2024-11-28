@@ -11,6 +11,7 @@ import {CommonContext} from "../../context/CommonContext.tsx";
 import {getAllCategory} from "../../Helper/Helper.ts";
 import {toast} from "react-toastify";
 import MyAccount from "./MyAccount.tsx";
+import MyCart from "./MyCart.tsx";
 
 
 type Props = {
@@ -20,17 +21,20 @@ type Props = {
 
 const Header = (props : Props) => {
     const [open, setOpen] = useState(false);
-
+    const [openCart, setOpenCart]  = useState<boolean>(false);
 
     // bien
     const navigation = useNavigate();
-    const {isLogin, info, setInfo, setSearch, setIsLogin, setCategory} = useContext(CommonContext);
+    const {isLogin, setInfo, setSearch, setIsLogin, setCategory} = useContext(CommonContext);
     const [searchValue, setSearchValue] = useState<string>('');
 
     const [items, setItems] = useState<MenuProps[]>([]);
 
     const showDrawer = () => {
         setOpen(true);
+    };
+    const showDrawerCart = () => {
+        setOpenCart(true);
     };
 
     const onClose = () => {
@@ -119,7 +123,7 @@ const Header = (props : Props) => {
                                        <div className={'group-hover:block hidden absolute z-[9] right-[-100%] dropdown-menu text-base bg-green_primary'}>
                                            <div className={'flex flex-col w-[150px]'}>
                                                <button className={'p-2 text-white hover:bg-white hover:text-green_primary transition-all duration-300 cursor-pointer'} onClick={showDrawer}>My Account</button>
-                                               <button className={'p-2 text-white hover:bg-white hover:text-green_primary transition-all duration-300 cursor-pointer'}>My Order</button>
+                                               <button className={'p-2 text-white hover:bg-white hover:text-green_primary transition-all duration-300 cursor-pointer'} onClick={showDrawerCart}>My Order</button>
                                                <button className={'p-2 text-white hover:bg-white hover:text-green_primary transition-all duration-300 cursor-pointer'} onClick={() => handleLogout()}>Logout</button>
                                            </div>
                                        </div>
@@ -137,19 +141,23 @@ const Header = (props : Props) => {
                    }
                </div>
                {/* 2 */}
-               <div className={`flex ${props.state == 1 ? 'h-0 overflow-hidden' : ''} transition-all duration-700 mt-2`}>
+               <div
+                   className={`flex ${props.state == 1 ? 'h-0 overflow-hidden' : ''} transition-all duration-700 mt-2`}>
                    <div className={'bg-green_primary p-4'}>
                        <p className={'text-xl font-bold text-white'}>Fruits & Vegetables</p>
                    </div>
-                   <div className={'p-4 cursor-pointer hover:bg-green_primary  text-gray-400 hover:hover:text-white'} onClick={ () => navigation('/product')}>
+                   <div className={'p-4 cursor-pointer hover:bg-green_primary  text-gray-400 hover:hover:text-white'}
+                        onClick={() => navigation('/product')}>
                        <p className={'font-bold'}>All Product</p>
                    </div>
-                   <div className={'p-4 cursor-pointer hover:bg-green_primary group'} onClick={ () => navigation('/blog')}>
-                       <p className={'font-bold  text-gray-400 group-hover:text-white'} >Recent Blogs</p>
+                   <div className={'p-4 cursor-pointer hover:bg-green_primary group'}
+                        onClick={() => navigation('/blog')}>
+                       <p className={'font-bold  text-gray-400 group-hover:text-white'}>Recent Blogs</p>
                    </div>
                </div>
            </div>
-            <MyAccount open={open} onClose={onClose} />
+           <MyAccount open={open} onClose={onClose}/>
+           <MyCart open={openCart} onClose={setOpenCart}/>
        </div>
     );
 };

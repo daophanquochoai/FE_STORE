@@ -59,7 +59,7 @@ const RenderBlog = (props : Props) => {
     }, [props.searchBlog, props.sortBy, props.pageBlog]);
     return (
         <Spin tip={"Loading..."} spinning={isLoadingBLog}>
-            <div className={`grid ${blogList.length > 0 ? 'grid-cols-4' : 'grid-cols-1'} mx-[5%] mt-6 gap-4`}>
+            <div className={`grid ${blogList.length > 0 ? 'grid-cols-5' : 'grid-cols-1'} mx-[5%] mt-6 gap-4`}>
                 {
                     blogList.length > 0 ? (
                         blogList.map((blo, index) => (

@@ -1,5 +1,5 @@
 import { Column } from '@ant-design/plots';
-import {useContext, useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {CommonContext} from "../context/CommonContext.tsx";
 import {useNavigate} from "react-router-dom";
 import {getRevenueByYear, getRevenueForYear } from "../Helper/Helper.ts";
@@ -80,7 +80,7 @@ const OverView = () => {
     const { setIsLogin } = useContext(CommonContext);
     const [year, setYear] = useState<number[]>([]);
     const [loadingYear, setLoadingYear] = useState<boolean>(false);
-    const [dataRevenue, setDataRevenue] = useState<Revenue[]>(initRevenue);
+    const [dataRevenue, setDataRevenue] = useState<Revenue[]>([...initRevenue]);
     const [loadingRevenue, setLoadingRevenue] = useState<boolean>(false);
     const [yearChoose, setYearChoose] = useState<number>(0);
     const navigate = useNavigate();
@@ -99,7 +99,6 @@ const OverView = () => {
         tooltip: { channel: 'y', valueFormatter: (d) => d.toLocaleString() + 'đ'}
     };
 
-    console.log(config)
 
     //useEffect
     useEffect(() => {
@@ -147,7 +146,7 @@ const OverView = () => {
                 return;
             }
             if( response.status === 200 ){
-                const arr : Revenue[] = initRevenue;
+                const arr : Revenue[] =  initRevenue.map(item => ({ ...item }));
                 response.data.forEach( (item, index) => {
                     arr.map( it => {
                         if( it.numberMonth == item.month){
@@ -164,6 +163,7 @@ const OverView = () => {
         }
         fetchRevenue(yearChoose)
     }, [yearChoose]);
+
 
     return (
         <div>

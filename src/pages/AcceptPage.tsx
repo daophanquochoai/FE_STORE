@@ -19,15 +19,17 @@ interface DataType {
 
 const AcceptPage = () => {
     const navigate = useNavigate();
-    const {acceptCart} = useContext(CommonContext);
+    const {acceptCart, info} = useContext(CommonContext);
     const [dataSource, setDataSource] = useState<DataType[]>([]);
     const [loadingAddress, setLoadingAddress] = useState<boolean>(false);
     const [payment, setPayment] = useState(1);
     const [treeData, setTreeData] = useState<Omit<DefaultOptionType, 'label'>[]>();
-    const [addDefault, setAddDefault] = useState<number>(0);
+    const [addDefault, setAddDefault] = useState<string>('');
     const [description, setDescription] = useState<string>('');
-    const [total, setTotal] = useState<boolean>(0)
-
+    const [total, setTotal] = useState<number>(0)
+    const [address, setAddress] = useState<string>('');
+    const [openAddress, setOpenAddress] = useState<boolean>(false);
+    const [numberPhone, setNumberPhone] = useState<string>(info.phone)
     const [loadingPayment, setIsLoadingPayment] = useState<boolean>(false);
 
     //useEffedt
@@ -66,9 +68,9 @@ const AcceptPage = () => {
             if( response.status === 200 ){
                 const arr : Omit<DefaultOptionType, 'label'>[] = [];
                 response.data.forEach( (item, index) => {
-                    arr.push({ id: item.id, pId: 0, value: item.id, title : <p className={'text-green-500'}>{item.address}</p>})
+                    arr.push({ id: item.address, pId: 0, value: item.id, title : <p className={'text-green-500'}>{item.address}</p>})
                     if( item.isDefault ){
-                        setAddDefault(item.id)
+                        setAddDefault(item.address)
                     }
                 })
                 setTreeData(arr);
@@ -120,13 +122,13 @@ const AcceptPage = () => {
             })
         })
         setIsLoadingPayment(true)
-        const response = await paymentCart(paymentItemList, addDefault,0,total,description, localStorage.getItem("accessToken"));
+        const response = await paymentCart(paymentItemList, openAddress ? address : addDefault, numberPhone,0,total,description, localStorage.getItem("accessToken"));
         setIsLoadingPayment(false)
+        console.log(response)
         if( response.hasOwnProperty('code') && response.code === "ERR_NETWORK" ){
             toast.error("NETWORK FAILING!!!!");
             return;
         }
-        console.log(response)
         if( response.status === 200 ){
             navigate('/')
             toast.success("PAYMENT SUCCESS!!")
@@ -143,6 +145,10 @@ const AcceptPage = () => {
     };
     const onChangeAddress = (e) => {
         setAddDefault(e);
+    }
+
+    const handleAddress = () => {
+        setOpenAddress(!openAddress);
     }
 
     return (
@@ -175,21 +181,25 @@ const AcceptPage = () => {
                         </div>
                         <div className={'flex justify-center items-center gap-4 flex-col p-4 border-b-2'}>
                             <p className={'text-2xl text-green-500 font-bold'}>Address</p>
-                            <div className={'flex gap-2'}>
-                                <TreeSelect
-                                    treeDataSimpleMode
-                                    style={{minWidth: '200px'}}
-                                    value={addDefault}
-                                    dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                                    placeholder="Please select"
-                                    onChange={onChangeAddress}
-                                    loading={loadingAddress}
-                                    treeData={treeData}
-                                />
-                                <button
-                                    className={'bg-green-500 text-white border-2 border-green-500 hover:bg-white hover:text-green-500 px-2 rounded-xl'}>New
-                                    Address
-                                </button>
+                            <div className={'flex gap-2 flex-col'}>
+                                 <div className={'flex gap-2'}>
+                                    <TreeSelect
+                                        treeDataSimpleMode
+                                        style={{minWidth: '200px'}}
+                                        value={addDefault}
+                                        dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                                        placeholder="Please select"
+                                        onChange={onChangeAddress}
+                                        loading={loadingAddress}
+                                        treeData={treeData}
+                                    />
+                                    <button
+                                        onClick={handleAddress}
+                                        className={'bg-green-500 text-white border-2 border-green-500 hover:bg-white hover:text-green-500 px-2 rounded-xl'}>
+                                        { openAddress ? 'Hidden' : 'New'}
+                                    </button>
+                                </div>
+                                <input className={`outline-0 border-b-2 border-green-500 w-3/4 ${openAddress ? 'inline-block' : 'hidden'}`} value={address} onChange={(e) => setAddress(e.target.value)}/>
                             </div>
                         </div>
                         <div className={'flex justify-center flex-col items-center gap-4 p-4'}>
@@ -200,17 +210,26 @@ const AcceptPage = () => {
                         </div>
                     </div>
                     <div className={'border-2 p-4 min-w-[300px]'}>
-                        <div className={'flex justify-between'}>
-                            <p className={'text-xl text-green-500 font-bold'}>Số Tiền :</p>
-                            <p className={'text-gray-500 font-bold'}>{total}đ</p>
+                        <div className={'flex justify-center flex-col items-center gap-4 p-4'}>
+                            <p className={'text-xl text-green-500 font-bold'}>Phone : </p>
+                            <input value={numberPhone} onChange={(e) => setNumberPhone(e.target.value)}
+                                   maxLength={10}
+                                   className={'border-b-2 border-green-500 text-base min-w-[200px] text-center outline-0 py-1'}
+                                   placeholder="Description"/>
                         </div>
-                        <div className={'flex justify-between items-center gap-4'}>
-                            <p className={'text-green-500 text-xl font-bold'}>Phí vận chuyển :</p>
-                            <p className={'text-gray-500 font-bold'}>0đ</p>
-                        </div>
-                        <div className={'flex justify-between'}>
-                            <p className={'text-green-500 text-xl font-bold'}>Tổng :</p>
-                            <p className={'text-gray-500 font-bold'}>{total}đ</p>
+                        <div>
+                            <div className={'flex justify-between'}>
+                                <p className={'text-xl text-green-500 font-bold'}>Số Tiền :</p>
+                                <p className={'text-gray-500 font-bold'}>{total}đ</p>
+                            </div>
+                            <div className={'flex justify-between items-center gap-4'}>
+                                <p className={'text-green-500 text-xl font-bold'}>Phí vận chuyển :</p>
+                                <p className={'text-gray-500 font-bold'}>0đ</p>
+                            </div>
+                            <div className={'flex justify-between'}>
+                                <p className={'text-green-500 text-xl font-bold'}>Tổng :</p>
+                                <p className={'text-gray-500 font-bold'}>{total}đ</p>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,7 @@
 import {env} from "./Contranst.ts";
 import axios, {AxiosResponse} from "axios";
+import {Simulate} from "react-dom/test-utils";
+import keyDown = Simulate.keyDown;
 
 export const getSocialLoginUrl  = ( name : string ) => {
     return `${env.url.API_BASE_URL}/oauth2/authorization/${name}?redirect_uri=${env.url.OAUTH2_REDIRECT_URI}`
@@ -27,14 +29,19 @@ export const getProductByCategory = async (id : number | undefined) => {
 export const getProductByProductId = async (id : string | undefined, token : string) => {
     try {
         if( id === undefined ) return [];
-        const response:AxiosResponse = await  axios.get(`${env.url.API_BASE_URL}/api/product/${id}`,
-            {
-                headers : {
-                    Authorization: `Bearer ${token}`
+        var response:AxiosResponse ;
+        if( token != '' ){
+            response = await  axios.get(`${env.url.API_BASE_URL}/api/product/${id}`,
+                {
+                    headers : {
+                        Authorization: `Bearer ${token}`
+                    },
                 },
-            },
             );
-        return await response;
+        }else{
+            response = await  axios.get(`${env.url.API_BASE_URL}/api/product/${id}`);
+        }
+        return response;
     }catch (e){
         return e;
     }
@@ -44,7 +51,7 @@ export const getProductByPage = async (page : number | undefined) => {
     try {
         if( page === undefined ) return [];
         const response:AxiosResponse = await  axios.get(`${env.url.API_BASE_URL}/api/product?page=` + page);
-        return await response.data;
+        return await response;
     }catch (e){
         return e;
     }
@@ -53,7 +60,7 @@ export const getProductByPage = async (page : number | undefined) => {
 export const getNotifyRecent = async () => {
     try {
         const response:AxiosResponse = await axios.get(`${env.url.API_BASE_URL}/api/notify/recent`);
-        return await response.data;
+        return await response;
     }catch (e){
         return e;
     }
@@ -171,7 +178,6 @@ export const getProductWithOption = async ( page : number, category : number, so
         if( search ){
             text.push(`search=${search}`)
         }
-        console.log(`${env.url.API_BASE_URL}/api/product` + (text.length > 0 ? `?${text.join('&')}` : ''))
         const respon = await axios.get(`${env.url.API_BASE_URL}/api/product` + (text.length > 0 ? `?${text.join('&')}` : ''));
         return respon;
     }catch ( e ){
@@ -312,12 +318,13 @@ export const getCart = async ( token : string) =>{
     }
 }
 
-export const paymentCart = async ( list : object[], addressId : number, fee : number, total : number, des : string, token:string) => {
+export const paymentCart = async ( list : object[], address : string, phone : string, fee : number, total : number, des : string, token:string) => {
     try{
         return await axios.post(`${env.url.API_BASE_URL}/api/cart/payment`,
             {
                 list : list,
-                addressId : addressId,
+                address : address,
+                phone : phone,
                 fee : fee,
                 total : total,
                 description : des,
@@ -433,6 +440,188 @@ export const getRevenueByYear = async (year: number, token: string | null) => {
             }
         );
     }catch ( e){
+        return e;
+    }
+}
+
+//admin
+export const createNewProduct = async (     productId: number, productTitle: string, imageUrl: string, imageUrl1: string, imageUrl2: string, imageUrl3 : string, priceUnit : number, priceOld : number,
+                                        quantity : number,
+                                        description: string,
+                                        unit : string, categoryId : number
+                                            ,token : string) => {
+    try{
+        return await axios.post(`${env.url.API_BASE_URL}/api/product/add`,
+            {
+                productId : productId,
+                productTitle : productTitle,
+                imageUrl : imageUrl,
+                imageUrl1 : imageUrl1,
+                imageUrl2 : imageUrl2,
+                imageUrl3 : imageUrl3,
+                priceUnit : priceUnit,
+                priceOld : priceOld,
+                quantity : quantity,
+                description : description,
+                unit : unit,
+                categoryId : categoryId,
+            },
+            {
+                headers : {
+                    Authorization: `Bearer ${token}`
+                },
+            }
+        );
+    }catch ( e){
+        return e;
+    }
+}
+
+export const deleteProductById = async ( id : number , token : string)=> {
+    try{
+        return await axios.delete(`${env.url.API_BASE_URL}/api/product/delete/` + id,
+            {
+                headers : {
+                    Authorization: `Bearer ${token}`
+                },
+            }
+        );
+    }catch ( e){
+        return e;
+    }
+}
+// add category
+export const addCategory = async ( title : string, image : string, token : string) => {
+    try{
+        return await axios.post(`${env.url.API_BASE_URL}/api/product/category/add`,
+            {
+                categoryTitle : title,
+                imageUrl : image
+            },
+            {
+                headers : {
+                    Authorization: `Bearer ${token}`
+                },
+            }
+        );
+    }catch ( e){
+        return e;
+    }
+}
+//update category
+export const updateCategory = async ( key : number, title : string, image : string, token : string) => {
+    try{
+        return await axios.put(`${env.url.API_BASE_URL}/api/product/category/update`,
+            {
+                key : key,
+                categoryTitle : title,
+                imageUrl : image
+            },
+            {
+                headers : {
+                    Authorization: `Bearer ${token}`
+                },
+            }
+        );
+    }catch ( e){
+        return e;
+    }
+}
+//delete category
+export const deleteCategory = async ( key : number, token : string)=> {
+    try{
+        return await axios.delete(`${env.url.API_BASE_URL}/api/product/category/delete/${key}`,
+            {
+                headers : {
+                    Authorization: `Bearer ${token}`
+                },
+            }
+        );
+    }catch ( e){
+        return e;
+    }
+}
+// admin - order
+export const getOrder = async (page: number ,start : string, end : string, token : string) => {
+    const params: any = { page };
+    if (start && end) {
+        params.start = start;
+        params.end = end;
+    }
+
+    try {
+        return await axios.get(`${env.url.API_BASE_URL}/api/cart/admin`, {
+            params,
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+    } catch (e) {
+        return e;
+    }
+}
+// admin -order
+export const updateOrderStatus = async ( orderId : number, status : number, token : string)=> {
+    try {
+        return await axios.patch(`${env.url.API_BASE_URL}/api/cart/admin/order/${orderId}/${status+1}`, {},{
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+    } catch (e) {
+        return e;
+    }
+}
+
+//admin - blog
+export const getAllBlog = async ( token : string) => {
+    try {
+        return await axios.get(`${env.url.API_BASE_URL}/api/notify/full`,{
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+    } catch (e) {
+        return e;
+    }
+}
+
+//admin - blog
+export const addBlog = async (  key : number, title : string, content : string, isEnabled : boolean, image : string, tag : string[], token : string)=> {
+    try {
+        return await axios.post(`${env.url.API_BASE_URL}/api/blog/add`,
+            {
+                notifyId : key,
+                title  : title,
+                content : content,
+                isEnabled : isEnabled,
+                image : image,
+                tags : tag
+            },
+            {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+    } catch (e) {
+        return e;
+    }
+}
+
+//admin - tag
+export const addTag =  async ( key : number, tag : string, token : string)=> {
+    try {
+        return await axios.post(`${env.url.API_BASE_URL}/api/tag/add`,
+            {
+                key : key,
+                tag : tag
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            });
+    } catch (e) {
         return e;
     }
 }
