@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "css:build": "postcss src/styles/index.css -o dist/index.css",
-    "prepare": "husky install"
+    "prepare": ""
   },
   "dependencies": {
     "@ant-design/charts": "^2.2.1",
